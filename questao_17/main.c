@@ -1,0 +1,3 @@
+/*
+    Levou menos tempo passando o ponteiro do que sem usar o ponteiro
+  */

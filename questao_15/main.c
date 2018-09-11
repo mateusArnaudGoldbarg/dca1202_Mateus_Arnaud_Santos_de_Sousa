@@ -1,45 +1,50 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-void ordenacao (int n, float p[]){
-    int i,j,aux;
-    for(i=0;i<n;i++){
-        for(j=i+1;j<n;j++){
-        if(p[j]<p[i]){
-            aux = p[i];
-            p[i] = p[j];
-            p[j]=aux;
-          }
-       }
+
+//funcao de ordenacao que sera passada para o qsort
+int ordenacao (const void *a,const void *b){
+    //converte de void para float e acessa o conteudo daquele endereço.
+    //faz a comparacao;
+    if(*(const float*)a == *(const float*)b){
+        return 0; // retorna 0 se o conteudo de a for igual ao de b
     }
-    for(i=0;i<n;i++){
-        printf("%.1f ",p[i]);
+    else
+        if(*(const float*)a < *(const float*)b){
+        return -1; //retorna -1 se o conteudo de a for menor ao de b
     }
-    printf("\n");
+    else{
+        return 1; //retorna 1 se o conteudo de a for maior que o de b
+    }
 }
+
 
 int main()
 {
-    int n,i,j;
-    float *p,aux;
-    printf("Digite o numero de valores desejados \n");
-    scanf("%d", &n);
-    p = (float*)malloc(n*sizeof(float));
-    if(p==NULL){
-        printf("nao foi possivel alocar a memoria");
-        exit(0);
-    }
-
+    int i,n = 10000;
+    float v[n];
+    clock_t t;
+    t = clock();
     for(i=0;i<n;i++){
-        printf("digite o valor da %d.a posicao\n",i+1);
-        scanf("%f",&p[i]);
+        v[i] = rand()%10;
     }
-    for(i=0;i<n;i++){
-        printf("%.1f ",p[i]);
-    }
-    printf("\n======================ORDENANDO====================\n");
+    printf("\n\n");
 
-    ordenacao(n,p);
-    free(p);
+    //na funcao qsort eh passado o vetor "v", o tamanho do vetor, o tamanho em bytes do tipo da variavel e por utimo a funcao
+    //dessa forma, acontecera a ordenacao em ordem crescente dos valores do vetor v
+    qsort(v,n,sizeof(float),ordenacao);
+    for(i=0;i<n;i++){
+        printf("%.1f ",v[i]);
+    }
+    printf("\n");
+    t = clock() - t;
+
+    printf ("It took me %d clicks (%f seconds).\n",
+              t,((float)t)/CLOCKS_PER_SEC);
+
+
+
+
     return 0;
 }
